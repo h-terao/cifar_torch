@@ -1,0 +1,15 @@
+comet_logger:
+  _target_: pytorch_lightning.loggers.comet.CometLogger
+  api_key: ${oc.env:COMET_API_TOKEN}
+  project_name: template-test
+  experiment_name: ${name}
+
+upload_code_to_comet:
+  _target_: src.callbacks.comet.UploadCode
+  code_dir: ${work_dir}
+  use_git: False
+
+upload_checkpoints_to_comet:
+  _target_: src.callbacks.comet.UploadCheckpoints
+  ckpt_dir: checkpoints/
+  upload_best_only: True

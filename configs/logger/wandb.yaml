@@ -1,0 +1,14 @@
+# https://wandb.ai
+
+wandb:
+  _target_: pytorch_lightning.loggers.wandb.WandbLogger
+  project: "template-tests"
+  # name: ${name}
+  id: null
+  save_dir: "."
+  offline: False # set True to store all logs only locally
+  log_model: True
+  prefix: ""
+  job_type: "train"
+  group: ""
+  tags: []

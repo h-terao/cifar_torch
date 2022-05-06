@@ -1,0 +1,4 @@
+defaults:
+  # - comet.yaml
+  - json.yaml
+  - wandb.yaml

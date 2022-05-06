@@ -1,0 +1,4 @@
+json_logger:
+  _target_: src.loggers.json_logger.JSONLogger
+  name: "log.json"
+  save_dir: "."

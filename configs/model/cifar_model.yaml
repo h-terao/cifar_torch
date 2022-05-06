@@ -1,0 +1,11 @@
+_target_: src.models.cifar_model.CifarLitModel
+
+arch: resnet18
+pretrained: False
+
+optimizer:
+  _target_: torch.optim.Adam
+  lr: 0.01
+  weight_decay: 0.0001
+
+lr_scheduler: null
