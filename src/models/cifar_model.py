@@ -3,7 +3,9 @@ from copy import deepcopy
 from typing import Any
 
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
+import torchvision.transforms as T
 import timm
 import pytorch_lightning as pl
 from torchmetrics.functional import accuracy
@@ -31,10 +33,14 @@ class CifarLitModel(pl.LightningModule):
         self.save_hyperparameters(logger=False)
 
         self.model = timm.create_model(arch, pretrained, num_classes=n_classes)
+        self.transform = nn.Sequential(T.RandomCrop(32, padding=4, padding_mode="reflect"), T.RandomHorizontalFlip())
 
     def shared_step(self, batch: Any, prefix: str) -> torch.Tensor:
         input, target = batch
         n = len(input)
+
+        if self.training:
+            input = self.transform(input)
 
         logit = self.model(input)
         loss = F.cross_entropy(logit, target)

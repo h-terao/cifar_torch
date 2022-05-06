@@ -1,11 +1,13 @@
 _target_: src.models.cifar_model.CifarLitModel
 
-arch: resnet18
+arch: resnet50
 pretrained: False
 
 optimizer:
-  _target_: torch.optim.Adam
-  lr: 0.01
-  weight_decay: 0.0001
+  _target_: torch.optim.SGD
+  lr: 0.1
+  momentum: 0.9
+  nesterov: False
+  weight_decay: 0.00001
 
 lr_scheduler: null

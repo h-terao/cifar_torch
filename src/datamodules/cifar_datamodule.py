@@ -1,9 +1,16 @@
 from typing import Optional
 
 from pytorch_lightning import LightningDataModule
-from torch.utils.data import DataLoader, Dataset, Subset
+import torch
+from torch.utils.data import DataLoader, Dataset, TensorDataset
 from torchvision.datasets import CIFAR10
-from torchvision.transforms import transforms
+
+
+def to_tensor_ds(ds: CIFAR10):
+    data = torch.from_numpy(ds.data).float().div(255.0)
+    data = torch.permute(data, (0, 3, 1, 2))  # nhwc
+    targets = torch.tensor(ds.targets)
+    return TensorDataset(data, targets)
 
 
 class CifarDataModule(LightningDataModule):
@@ -38,8 +45,6 @@ class CifarDataModule(LightningDataModule):
         self.num_workers = num_workers
         self.pin_memory = pin_memory
 
-        self.transforms = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
-
         self.data_train: Optional[Dataset] = None
         self.data_val: Optional[Dataset] = None
         self.data_test: Optional[Dataset] = None
@@ -53,14 +58,9 @@ class CifarDataModule(LightningDataModule):
         CIFAR10(self.data_dir, train=False, download=True)
 
     def setup(self, stage: Optional[str] = None):
-        self.data_train = CIFAR10(self.data_dir, train=True, transform=self.transforms)
-        self.data_val = CIFAR10(self.data_dir, train=False, transform=self.transforms)
-        self.data_test = CIFAR10(self.data_dir, train=False, transform=self.transforms)
-
-        # Use smaller dataset for debug.
-        self.data_train = Subset(self.data_train, list(range(1000)))
-        self.data_val = Subset(self.data_val, list(range(1000)))
-        self.data_test = Subset(self.data_test, list(range(1000)))
+        self.data_train = to_tensor_ds(CIFAR10(self.data_dir, train=True))
+        self.data_val = to_tensor_ds(CIFAR10(self.data_dir, train=False))
+        self.data_test = to_tensor_ds(CIFAR10(self.data_dir, train=False))
 
     def train_dataloader(self):
         return DataLoader(

@@ -14,7 +14,7 @@ From: nvidia/cuda:11.3.1-cudnn8-devel-ubuntu20.04
     DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata software-properties-common wget \
         curl nano python3-dev python3-pip python-is-python3 git pkg-config ccache unzip
 
-    pip3 installpip3 install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+    pip3 install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
     pip3 install -r requirements.txt
 
 %labels
